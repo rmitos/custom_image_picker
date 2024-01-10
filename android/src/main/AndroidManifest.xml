@@ -1,0 +1,4 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="net.rmitsolutions.custom_image_picker">
+    <uses-permission android:name="android.permission.CAMERA" />
+</manifest>
