@@ -77,7 +77,6 @@ class CustomImagePickerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     private fun requestPermission() {
-        Log.d("CustomImagePicker", "::::requestPermission() method called.")
         ActivityCompat.requestPermissions(
             activity!!, arrayOf(Manifest.permission.CAMERA),
             openCameraPermission
@@ -85,14 +84,15 @@ class CustomImagePickerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray): Boolean {
-        Log.d("CustomImagePicker", "::::onRequestPermissionsResult method called.")
-        if (requestCode == openCameraPermission) {
-            Log.d("CustomImagePicker", "::::onRequestPermissionsResult method requestCode == openCameraPermission.")
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getImageFromCamera()
-                return true
-            }
+        if (requestCode != openCameraPermission) {
+            return false;
         }
+
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getImageFromCamera()
+            return true
+        }
+
         requestPermission()
         return false
     }
