@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -76,6 +77,7 @@ class CustomImagePickerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     private fun requestPermission() {
+        Log.d("CustomImagePicker", "::::requestPermission() method called.")
         ActivityCompat.requestPermissions(
             activity!!, arrayOf(Manifest.permission.CAMERA),
             openCameraPermission
@@ -83,7 +85,9 @@ class CustomImagePickerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray): Boolean {
+        Log.d("CustomImagePicker", "::::onRequestPermissionsResult method called.")
         if (requestCode == openCameraPermission) {
+            Log.d("CustomImagePicker", "::::onRequestPermissionsResult method requestCode == openCameraPermission.")
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getImageFromCamera()
                 return true

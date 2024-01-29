@@ -1,7 +1,7 @@
 name: custom_image_picker
-description: A new Flutter project.
-version: 0.0.1
-homepage:
+description: Custom image picker Flutter project.
+version: 0.0.2
+homepage: https://github.com/rmitos/custom_image_picker.git
 
 environment:
   sdk: '>=2.19.2 <3.0.0'
