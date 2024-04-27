@@ -1,6 +1,9 @@
 import 'dart:typed_data';
+import 'dart:io' as io;
 
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:custom_image_picker/custom_image_picker_constants.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_image_picker_platform_interface.dart';
@@ -27,8 +30,8 @@ class CustomImagePicker {
                             Navigator.pop(context);
                           }
                         },
-                        child: Column(
-                          children: const [
+                        child: const Column(
+                          children: [
                             Padding(
                               padding: EdgeInsets.all(4.0),
                               child: Icon(
@@ -53,8 +56,8 @@ class CustomImagePicker {
                             Navigator.pop(context);
                           }
                         },
-                        child: Column(
-                          children: const [
+                        child: const Column(
+                          children: [
                             Padding(
                               padding: EdgeInsets.all(4.0),
                               child: Icon(
@@ -92,6 +95,32 @@ class CustomImagePicker {
   }
 
   Future<Uint8List?> _getImage(String source) async {
-    return await CustomImagePickerPlatform.instance.getImage(source);
+    if (io.Platform.isAndroid) {
+      return await CustomImagePickerPlatform.instance.getImage(source);
+    } else if (io.Platform.isIOS) {
+      if (CustomImagePickerConstants.gallery == source) {
+        return await _selectIOSImage();
+      } else {
+        //camera
+        return await _getIOSCameraImage();
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Future<Uint8List?> _selectIOSImage() async {
+    XTypeGroup typeGroup = const XTypeGroup(
+      label: 'Images',
+      uniformTypeIdentifiers: ['public.png', 'public.jpeg'],
+    );
+    final XFile? file = await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
+    return await file?.readAsBytes();
+  }
+
+  Future<Uint8List?> _getIOSCameraImage() async {
+    final ImagePickerPlatform picker = ImagePickerPlatform.instance;
+    final XFile? file = await picker.getImageFromSource(source: ImageSource.camera);
+    return await file?.readAsBytes();
   }
 }
